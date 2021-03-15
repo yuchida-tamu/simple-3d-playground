@@ -1,4 +1,5 @@
 import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js';
+import { Player, PlayerController } from './player.js';
 
 let isMovingH = false;
 let isMovingV = false;
@@ -42,78 +43,19 @@ const mSphere = new THREE.MeshBasicMaterial({
 });
 const sphere = new THREE.Mesh(gSphere, mSphere);
 sphere.position.y = -100;
-scene.add(sphere);
 
-function onKeyPressed(event) {
-  //check if the key pressed is either one of the arrow keys
-  //LEFT
-  if (event.keyCode === 37) {
-    isMovingH = true;
-    isRight = false;
-  }
-  //UP
-  if (event.keyCode === 38) {
-    isMovingV = true;
-    isForward = true;
-  }
-  //RIGHT
-  if (event.keyCode === 39) {
-    isMovingH = true;
-    isRight = true;
-  }
-  //DOWN
-  if (event.keyCode === 40) {
-    isMovingV = true;
-    isForward = false;
-  }
-  console.log('right: ', isRight);
-  console.log('forward: ', isForward);
-}
+const player = new Player(5, sphere);
+const controller = new PlayerController(player);
+console.log(controller.character);
 
-function onKeyReleased(event) {
-  //check if the key pressed is either one of the arrow keys
-  //LEFT
-  if (event.keyCode === 37) {
-    isMovingH = false;
-  }
-  //UP
-  if (event.keyCode === 38) {
-    isMovingV = false;
-  }
-  //RIGHT
-  if (event.keyCode === 39) {
-    isMovingH = false;
-  }
-  //DOWN
-  if (event.keyCode === 40) {
-    isMovingV = false;
-  }
-  console.log('ismovingH: ', isMovingH);
-  console.log('ismovingV: ', isMovingV);
-}
+//scene.add(sphere);
+scene.add(player.getBody());
 
-//Add event listners for key inputs
-window.addEventListener('keydown', onKeyPressed);
-window.addEventListener('keyup', onKeyReleased);
+controller.init();
 
 function animate() {
   requestAnimationFrame(animate);
-  if (isMovingV) {
-    if (isForward) {
-      sphere.position.z -= 5;
-    }
-    if (!isForward) {
-      sphere.position.z += 5;
-    }
-  }
-  if (isMovingH) {
-    if (isRight) {
-      sphere.position.x += 5;
-    }
-    if (!isRight) {
-      sphere.position.x -= 5;
-    }
-  }
+  controller.move();
 
   renderer.render(scene, camera);
 }
