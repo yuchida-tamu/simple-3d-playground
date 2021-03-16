@@ -63,7 +63,6 @@ export class PlayerController {
       this.isMovingV = true;
       this.isForward = false;
     }
-    console.log(event.keyCode, this.isRight);
   };
 
   onKeyUp = event => {
@@ -84,7 +83,6 @@ export class PlayerController {
     if (event.keyCode === 40) {
       this.isMovingV = false;
     }
-    console.log.bind(this.character);
   };
 
   move = () => {
